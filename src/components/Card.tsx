@@ -1,16 +1,16 @@
 import Image from 'next/image'
 
 import { urlForImage } from '~/lib/sanity.image'
-import { type Post } from '~/lib/sanity.queries'
+import { type Article } from '~/lib/sanity.queries'
 import { formatDate } from '~/utils'
 
-export default function Card({ post }: { post: Post }) {
+export default function Card({ article }: { article: Article }) {
   return (
     <div className="card">
-      {post.mainImage ? (
+      {article.image ? (
         <Image
           className="card__cover"
-          src={urlForImage(post.mainImage).width(500).height(300).url()}
+          src={urlForImage(article.image).width(500).height(300).url()}
           height={300}
           width={500}
           alt=""
@@ -20,12 +20,12 @@ export default function Card({ post }: { post: Post }) {
       )}
       <div className="card__container">
         <h3 className="card__title">
-          <a className="card__link" href={`/post/${post.slug.current}`}>
-            {post.title}
+          <a className="card__link" href={`/article/${article.slug.current}`}>
+            {article.title}
           </a>
         </h3>
-        <p className="card__excerpt">{post.excerpt}</p>
-        <p className="card__date">{formatDate(post._createdAt)}</p>
+        <p className="card__excerpt">{article.intro}</p>
+        <p className="card__date">{formatDate(article._createdAt)}</p>
       </div>
     </div>
   )

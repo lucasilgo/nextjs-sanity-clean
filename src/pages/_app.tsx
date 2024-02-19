@@ -1,8 +1,10 @@
 import '~/styles/global.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { VisualEditing } from "@sanity/visual-editing/next-pages-router";
 import type { AppProps } from 'next/app'
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
-import { lazy } from 'react'
+import { lazy, Suspense } from 'react'
 
 export interface SharedPageProps {
   draftMode: boolean
@@ -49,6 +51,9 @@ export default function App({
       {draftMode ? (
         <PreviewProvider token={token}>
           <Component {...pageProps} />
+          <Suspense>
+            <VisualEditing />
+          </Suspense>
         </PreviewProvider>
       ) : (
         <Component {...pageProps} />
