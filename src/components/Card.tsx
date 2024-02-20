@@ -25,7 +25,7 @@ export default function Card({ article }: { article: Article }) {
           </a>
         </h3>
         <p className="card__excerpt">{article.intro}</p>
-        <p className="card__date">{formatDate(article._createdAt)}</p>
+        <p className="card__date">{formatDate(article.date || article._createdAt)}</p>
       </div>
     </div>
   )

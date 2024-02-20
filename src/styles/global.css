@@ -341,7 +341,7 @@ main {
   display: flex;
   flex-direction: column;
   padding: var(--space-2);
-  padding: 9px;
+  margin: 10px;
   position: relative;
   border-bottom: 1px solid #ced2d9;
 }
