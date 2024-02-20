@@ -56,5 +56,11 @@ export default defineType({
         ],
       },
     }),
+    { 
+      type: 'image',
+      options: {
+        hotspot: true,
+      }
+    }
   ],
 })

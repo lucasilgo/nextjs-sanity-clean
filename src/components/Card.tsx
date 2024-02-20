@@ -16,7 +16,7 @@ export default function Card({ article }: { article: Article }) {
           alt=""
         />
       ) : (
-        <div className="card__cover--none" />
+        <></>
       )}
       <div className="card__container">
         <h3 className="card__title">

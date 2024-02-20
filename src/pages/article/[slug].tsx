@@ -43,6 +43,15 @@ export const getStaticProps: GetStaticProps<
   }
 }
 
+const CustomImageComponent = ({value}) => {
+  return (
+    <figure className="mb-5">
+      <img src={urlForImage(value).url()} className="img-fluid" alt="Article Image"
+        style={{ width: "856px", height: "480px", objectFit: "cover" }} />
+    </figure>
+  )
+}
+
 export default function ProjectSlugRoute(
   props: InferGetStaticPropsType<typeof getStaticProps>,
 ) {
@@ -75,7 +84,7 @@ export default function ProjectSlugRoute(
               </figure>
             }
 
-            <PortableText value={article.body} />
+            <PortableText value={article.body} components={{ types: { image: CustomImageComponent } }} />
 
           </article>
 
