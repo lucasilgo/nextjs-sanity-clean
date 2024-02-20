@@ -12,6 +12,7 @@ import {
 } from 'sanity-plugin-iframe-pane'
 import { previewUrl } from 'sanity-plugin-iframe-pane/preview-url'
 import { presentationTool } from 'sanity/presentation'
+import { settingsPlugin, settingsStructure } from '~/plugins/settings'
 
 // see https://www.sanity.io/docs/api-versioning for how versioning works
 import {
@@ -21,6 +22,8 @@ import {
   projectId,
 } from '~/lib/sanity.api'
 import { schema } from '~/schemas'
+import { structureTool } from 'sanity/structure'
+import settingsType from '~/schemas/settings'
 
 const iframeOptions = {
   url: defineUrlResolver({
@@ -40,7 +43,8 @@ export default defineConfig({
   //edit schemas in './src/schemas'
   schema,
   plugins: [
-    deskTool({
+    structureTool({
+      structure: settingsStructure(settingsType),
       // `defaultDocumentNode` is responsible for adding a “Preview” tab to the document pane
       // You can add any React component to `S.view.component` and it will be rendered in the pane
       // and have access to content in the form in real-time.
@@ -71,5 +75,6 @@ export default defineConfig({
         },
       },
     }),
+    settingsPlugin({ type: 'settings' }),
   ],
 })

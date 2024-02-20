@@ -29,6 +29,11 @@ export const articleSlugsQuery = groq`
 *[_type == "article" && defined(slug.current)][].slug.current
 `
 
+export const settingsQuery = groq`*[_type == "settings"][0]`
+export async function getSettings(client: SanityClient): Promise<Settings> {
+  return (await client.fetch(settingsQuery)) || {}
+}
+
 export interface Article {
   _type: 'article'
   _id: string
@@ -39,4 +44,8 @@ export interface Article {
   intro?: string
   image?: ImageAsset & { caption: string }
   body: PortableTextBlock[]
+}
+
+export interface Settings {
+  title?: string
 }
