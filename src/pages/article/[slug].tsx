@@ -1,6 +1,7 @@
 import { PortableText } from '@portabletext/react'
 import type { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { useLiveQuery } from 'next-sanity/preview'
+import Head from 'next/head';
 
 import Container from '~/components/Container'
 import { readToken } from '~/lib/sanity.api'
@@ -11,6 +12,8 @@ import {
   type Article,
   articleBySlugQuery,
   articleSlugsQuery,
+  getSettings,
+  Settings,
 } from '~/lib/sanity.queries'
 import type { SharedPageProps } from '~/pages/_app'
 import { formatDate } from '~/utils'
@@ -22,11 +25,13 @@ interface Query {
 export const getStaticProps: GetStaticProps<
   SharedPageProps & {
     article: Article
+    settings: Settings
   },
   Query
 > = async ({ draftMode = false, params = {} }) => {
   const client = getClient(draftMode ? { token: readToken } : undefined)
   const article = await getArticle(client, params.slug)
+  const settings = await getSettings(client)
 
   if (!article) {
     return {
@@ -39,6 +44,7 @@ export const getStaticProps: GetStaticProps<
       draftMode,
       token: draftMode ? readToken : '',
       article,
+      settings
     },
   }
 }
@@ -55,43 +61,47 @@ const CustomImageComponent = ({value}) => {
 export default function ProjectSlugRoute(
   props: InferGetStaticPropsType<typeof getStaticProps>,
 ) {
+  const pageTitle = props.settings.title
   const [article] = useLiveQuery(props.article, articleBySlugQuery, {
     slug: props.article.slug.current,
   })
 
   return (
-    <Container>
-      <div className="row">
+    <>
+      <Head><title>{pageTitle}</title></Head>
+      <Container>
+        <div className="row">
 
-        <div className="col-md-8 offset-md-2">
+          <div className="col-md-8 offset-md-2">
 
-          <article className="article-show blog-post mt-5">
+            <article className="article-show blog-post mt-5">
 
-            <p className="blog-post-meta">{formatDate(article.date || article._createdAt)}</p>
+              <p className="blog-post-meta">{formatDate(article.date || article._createdAt)}</p>
 
-            <h1 className="article-title blog-post-title mb-3">{article.title}</h1>
+              <h1 className="article-title blog-post-title mb-3">{article.title}</h1>
 
-            {article.intro && <p className="article-preface lead" data-th-if="${intro}">{article.intro}</p>}
+              {article.intro && <p className="article-preface lead" data-th-if="${intro}">{article.intro}</p>}
 
-            <hr />
+              <hr />
 
-            {
-              article.image &&
-              <figure className="mb-5">
-                <img src={urlForImage(article.image).url()} className="img-fluid" alt="Article Image"
-                  style={{ width: "856px", height: "480px", objectFit: "cover" }} />
-                <figcaption className="figure-caption mt-2">{article.image.caption}</figcaption>
-              </figure>
-            }
+              {
+                article.image &&
+                <figure className="mb-5">
+                  <img src={urlForImage(article.image).url()} className="img-fluid" alt="Article Image"
+                    style={{ width: "856px", height: "480px", objectFit: "cover" }} />
+                  <figcaption className="figure-caption mt-2">{article.image.caption}</figcaption>
+                </figure>
+              }
 
-            <PortableText value={article.body} components={{ types: { image: CustomImageComponent } }} />
+              <PortableText value={article.body} components={{ types: { image: CustomImageComponent } }} />
 
-          </article>
+            </article>
+
+          </div>
 
         </div>
-
-      </div>
-    </Container>
+      </Container>
+    </>
   )
 }
 
