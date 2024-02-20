@@ -5,6 +5,7 @@ import { VisualEditing } from "@sanity/visual-editing/next-pages-router";
 import type { AppProps } from 'next/app'
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
 import { lazy, Suspense } from 'react'
+import Head from 'next/head';
 
 export interface SharedPageProps {
   draftMode: boolean
@@ -39,6 +40,7 @@ export default function App({
   const { draftMode, token } = pageProps
   return (
     <>
+      <Head><title>Seeds Demo</title></Head>
       <style jsx global>
         {`
           :root {
