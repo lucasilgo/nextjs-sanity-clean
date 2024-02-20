@@ -1,6 +1,5 @@
 import { PortableText } from '@portabletext/react'
 import type { GetStaticProps, InferGetStaticPropsType } from 'next'
-import Image from 'next/image'
 import { useLiveQuery } from 'next-sanity/preview'
 
 import Container from '~/components/Container'
@@ -53,27 +52,36 @@ export default function ProjectSlugRoute(
 
   return (
     <Container>
-      <section className="post">
-        {article.image ? (
-          <Image
-            className="post__cover"
-            src={urlForImage(article.image).url()}
-            height={231}
-            width={367}
-            alt=""
-          />
-        ) : (
-          <div className="post__cover--none" />
-        )}
-        <div className="post__container">
-          <h1 className="post__title">{article.title}</h1>
-          <p className="post__excerpt">{article.intro}</p>
-          <p className="post__date">{formatDate(article._createdAt)}</p>
-          <div className="post__content">
+      <div className="row">
+
+        <div className="col-md-8 offset-md-2">
+
+          <article className="article-show blog-post mt-5">
+
+            <p className="blog-post-meta">{formatDate(article.date || article._createdAt)}</p>
+
+            <h1 className="article-title blog-post-title mb-3">{article.title}</h1>
+
+            {article.intro && <p className="article-preface lead" data-th-if="${intro}">{article.intro}</p>}
+
+            <hr />
+
+            {
+              article.image &&
+              <figure className="mb-5">
+                <img src={urlForImage(article.image).url()} className="img-fluid" alt="Article Image"
+                  style={{ width: "856px", height: "480px", objectFit: "cover" }} />
+                <figcaption className="figure-caption mt-2">{article.image.caption}</figcaption>
+              </figure>
+            }
+
             <PortableText value={article.body} />
-          </div>
+
+          </article>
+
         </div>
-      </section>
+
+      </div>
     </Container>
   )
 }

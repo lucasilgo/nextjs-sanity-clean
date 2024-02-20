@@ -1,21 +1,17 @@
-import type { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { useLiveQuery } from 'next-sanity/preview'
-import { useRouter } from 'next/router';
+import type { InferGetStaticPropsType } from 'next'
 
 import Card from '~/components/Card'
 import Container from '~/components/Container'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { getArticles, type Article, articlesQuery } from '~/lib/sanity.queries'
-import type { SharedPageProps } from '~/pages/_app'
+import { getArticlesBySearch } from '~/lib/sanity.queries'
 
-export const getStaticProps: GetStaticProps<
-  SharedPageProps & {
-    articles: Article[]
-  }
-> = async ({ draftMode = false }) => {
+
+export const getServerSideProps = async ({ draftMode = false, query }) => {
   const client = getClient(draftMode ? { token: readToken } : undefined)
-  const articles = await getArticles(client)
+  const searchTerm = Array.isArray(query.s) ? query.s[0] : query.s
+
+  const articles = await getArticlesBySearch(client, searchTerm)
 
   return {
     props: {
@@ -27,12 +23,9 @@ export const getStaticProps: GetStaticProps<
 }
 
 export default function ListPage(
-  props: InferGetStaticPropsType<typeof getStaticProps>
+  props: InferGetStaticPropsType<typeof getServerSideProps>
 ) {
-  const router = useRouter()
-  const { s } = router.query
-
-  const [articles] = useLiveQuery<Article[]>(props.articles, articlesQuery)
+  const articles = props.articles || [];
 
   return (
     <Container>

@@ -13,8 +13,15 @@ export default function Container({ children }: { children: React.ReactNode }) {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarCollapse">
-            <ul className="navbar-nav me-auto mb-2 mb-md-0"></ul>
-            <form className="d-flex" action=''>
+            <ul className="navbar-nav me-auto mb-2 mb-md-0">
+              <li className="nav-item">
+                <a className="nav-link" aria-current="page" href="/list">List</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" target='_blank' aria-current="page" href="/studio">Studio</a>
+              </li>
+            </ul>
+            <form className="d-flex" action='/list'>
                 <div className="input-group">
                     <input type="text" name="s" className="form-control" placeholder="Søk" aria-label="Søk" defaultValue={s || ''} />
                     <button className="btn btn-primary" id="search">Search</button>

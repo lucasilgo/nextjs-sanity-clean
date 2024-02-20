@@ -9,6 +9,11 @@ export async function getArticles(client: SanityClient): Promise<Article[]> {
   return await client.fetch(articlesQuery)
 }
 
+export const articlesBySearch = groq`*[_type == "article" && title match "*" + $term + "*"]`
+export async function getArticlesBySearch(client: SanityClient, term: string): Promise<Article[]> {
+  return term ? await client.fetch(articlesBySearch, { term }) : getArticles(client)
+}
+
 export const articleBySlugQuery = groq`*[_type == "article" && slug.current == $slug][0]`
 
 export async function getArticle(
@@ -30,8 +35,8 @@ export interface Article {
   _createdAt: string
   title: string
   slug: Slug
-  date: Date
+  date: string
   intro?: string
-  image?: ImageAsset
+  image?: ImageAsset & { caption: string }
   body: PortableTextBlock[]
 }

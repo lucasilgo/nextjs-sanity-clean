@@ -23,7 +23,7 @@ export default defineType({
     defineField({
         name: 'date',
         title: 'Date',
-        type: 'datetime'
+        type: 'date'
     }),
     defineField({
       name: 'intro',
@@ -38,6 +38,13 @@ export default defineType({
       options: {
         hotspot: true,
       },
+      fields: [
+        {
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+        }
+      ]
     }),
     defineField({
       name: 'body',
