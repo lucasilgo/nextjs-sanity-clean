@@ -9,7 +9,7 @@ export async function getArticles(client: SanityClient): Promise<Article[]> {
   return await client.fetch(articlesQuery)
 }
 
-export const articlesBySearch = groq`*[_type == "article" && title match "*" + $term + "*"] | order(_createdAt desc) | order(date desc)`
+export const articlesBySearch = groq`*[_type == "article" && [title, intro] match "*" + $term + "*"] | order(_createdAt desc) | order(date desc)`
 export async function getArticlesBySearch(client: SanityClient, term: string): Promise<Article[]> {
   return term ? await client.fetch(articlesBySearch, { term }) : getArticles(client)
 }
